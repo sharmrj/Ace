@@ -95,7 +95,8 @@ export type Vector = {
 type BaseBox = {
   position: Vector;
   out: Box | null
-  element: HTMLElement;
+  element: HTMLElement | null;
+  lines: Unknown[];
 }
 
 export type Box = BaseBox & (JoinBox | TableBox | UnionBox | InnerQueryBox)
