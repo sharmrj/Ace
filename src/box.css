@@ -4,4 +4,10 @@
   background-color: transparent;
   border: 2.5px solid whitesmoke;
   border-radius: 8px;
+  user-select: none;
+}
+
+
+.box.selected {
+  border: 5px solid white;
 }

@@ -1,0 +1,25 @@
+.menu {
+  position: absolute;
+  left: 2%;
+  bottom: 2%;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: 2px solid whitesmoke;
+  transition: all 0.25s ease-in-out;
+}
+
+.menu > .menu-item {
+  display: none;
+}
+
+.menu.show-menu {
+  border-radius: 0;
+  width: 200px;
+  height: 200px;
+}
+
+.menu.show-menu > .menu-item {
+  display: block;
+}
+

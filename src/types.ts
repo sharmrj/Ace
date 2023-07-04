@@ -28,10 +28,10 @@ export type Select = {
   select_columns: String[];
 }
 export type LeftTable = {
-  lft_tbl: Fetch;
+  lft_tbl: Fetch | null;
 }
 export type RightTable = {
-  right_tbl: Fetch;
+  right_tbl: Fetch | null;
 }
 
 export type Function = {

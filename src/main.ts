@@ -1,59 +1,16 @@
 import './style.css';
 import './box.css';
+import './menu.css';
+import { 
+  createJoinBox,
+  createTableBox,
+  createUnionBox,
+  createInnerQueryBox
+  } from './create.ts'
+import { makeDraggable, setPosition } from './drag.ts';
+import { generateJSON } from './generateJSON.ts';
 
 let n = 0;
-
-const vectorSubtract = (v1: Vector, v2: Vector): Vector => ({
-  x: v1.x - v2.x,
-  y: v1.y - v2.y
-});
-
-const vectorAdd = (v1: Vector, v2: Vector): Vector => ({
-  x: v1.x + v2.x,
-  y: v1.y + v2.y
-});
-
-const setPosition = (el: HTMLElement, pos: Vector): void => {
-  el.style.left = `${pos.x}px`;
-  el.style.top = `${pos.y}px`;
-};
-
-
-const makeDraggable = (box: Box): void => {
-  const el = box.element;
-  let dragging = false;
-  let initialPos: Vector;
-  let offset: Vector;
-  const mePos = (e: Events.MouseEvent): Vector => ({ x: e.pageX, y: e.pageY});
-
-  const startDragging = (event: Events.MouseEvent) => {
-    dragging = true;
-    initialPos = mePos(event);
-    const bc = el.getBoundingClientRect();
-    const boxPos = { x: bc.left, y: bc.top };
-    offset = vectorSubtract(boxPos, initialPos);
-  };
-
-  const move = (event: Events.MouseEvent) => {
-    if (dragging) {
-      const movement = 
-        vectorSubtract(mePos(event), initialPos);
-      el.style.transform = `translate(${movement.x}px, ${movement.y}px)`;
-      box.lines.map(line => line.position());
-    }
-  }
-  const stopDragging = (event: events.MouseEvent) => { 
-    if (dragging) {
-      dragging = false;
-      setPosition(el, vectorAdd(mePos(event), offset));
-      el.style.transform = '';
-    }
-  }
-  el.addEventListener('mousedown', startDragging);
-  el.addEventListener('mousemove', move);
-  el.addEventListener('mouseup', stopDragging);
-  el.addEventListener('mouseout', stopDragging);
-};
 
 const createElement = (box: Box): HTMLElement => {
   const position = box.position;
@@ -69,17 +26,32 @@ const createElement = (box: Box): HTMLElement => {
 
 const getBox = (id) => boxes.find(box => box.element.dataset.id === id);
 
+const initBox  = (box: Box) => initBoxes([box]);
+
+let from: HTMLElement | null;
+let to: HTMLElement | null;
+
+const deselectAll = () => {
+  from?.classList.remove('selected');
+  from = null;
+  to?.classList.remove('selected');
+  to = null;
+};
+
+document.body.addEventListener('click', deselectAll);
+
 const initBoxes = (boxList: Box[]) => {
-  let from: HTMLElement;
-  let to: HTMLElement;
   boxList.map(box => {
     const el = createElement(box);
     el.addEventListener("click", (event: Event.MouseEvent) => {
       if(event.shiftKey) {
+        event.stopPropagation();
         if (!from) {
           from = el;
+          from.classList.add('selected');
         } else {
           to = el;
+          to.classList.add('selected');
         }
         if (from && to) {
           const drawLine = () => {
@@ -103,95 +75,67 @@ const initBoxes = (boxList: Box[]) => {
               toBox.rightIn = fromBox;
               drawLine();
             }
-            from = null;
-            to = null;
           }
+          deselectAll();
+          console.info(boxes);
         }
       }
     });
+    el.textContent = boxKind(box);
     document.body.append(el);
   });
 }
 
-const createJoinBox = (position: Vector): Box  => {
-  return {
-    position,
-    out: null,
-    element: null,
-    lines: [],
-    leftIn: null,
-    rightIn: null,
-    select_columns: [],
-    merge_strategy: {
-      type: '',
-      conditions: {
-        c0: {
-          name: '',
-          operator: '',
-          value: ''
-        }
-      }
-    }
-  };
-};
+export const boxKind = (box: Box[]): String => {
+  if (box.hasOwnProperty('table')) return 'Table';
+  if (box.hasOwnProperty('in')) return 'Inner Query';
+  if (box.hasOwnProperty('leftIn')
+  && box.hasOwnProperty('rightIn')
+  && box.hasOwnProperty('merge_strategy')) return 'Join';
+  return 'Union';
+}
 
-const createTableBox = (position: Vector): Box => {
-  return {
-    position,
-    out: null,
-    element: null,
-    lines: [],
-    table: {
-      name: '',
-      functions: [],
-      select_columns: [],
-      where_clause: {
-        c0: {
-          name: '',
-          operator: '',
-          value: '',
-        },
-        And: {
-          c0: {
-            name: '',
-            operator: '',
-            value: '',
-          }
-        }
-      },
-    }
-  };
-};
-
-const createUnionBox = (position: Vector): Box => {
-  return {
-    position,
-    out: null,
-    element: null,
-    lines: [],
-    leftIn: null,
-    rightIn: null
-  };
-};
-
-const createInnerQueryBox = (position: Vector): Box => {
-  return {
-    position,
-    in: null,
-    out: null,
-    element: null,
-    lines: []
+const initMenu = () => {
+  const menu = document.querySelector('.menu');
+  const addMenuItems = () => {
+    const bs = [
+      ['Join', createJoinBox], 
+      ['Table', createTableBox],
+      ['Union', createUnionBox],
+      ['Inner Query', createInnerQueryBox]
+    ];
+    const menuItems = bs.map(([name, create]) => {
+      const item = document.createElement('div');
+      item.textContent = name;
+      item.classList.add('menu-item');
+      item.addEventListener('click', () => {
+        const box = create({ x: 400, y: 400 });
+        boxes.push(box)
+        initBox(box);
+      })
+      return item;
+    });
+    menuItems.forEach(item => menu.appendChild(item));
   }
+  menu.addEventListener('mouseenter', () => {
+    menu.classList.add('show-menu');
+  });
+  menu.addEventListener('mouseleave', () => {
+    menu.classList.remove('show-menu');
+  });
+  addMenuItems();
 };
 
+const boxes = [];
 
+const generateButton = document.createElement('button');
+generateButton.textContent = 'generate JSON';
+generateButton.addEventListener('click', () => {
+  console.info(generateJSON(boxes));
+})
+generateButton.style.position = 'absolute';
+generateButton.style.right = '2%';
+generateButton.style.top = '2%';
+document.body.append(generateButton);
 
-const box1 = createInnerQueryBox({ x: 400, y: 400});
-const box2 = createInnerQueryBox({ x: 700, y: 400});
-const box3 = createInnerQueryBox({ x: 1000, y: 400});
-
-const boxes = [box1, box2, box3]
-
-initBoxes(boxes);
-
-
+initMenu();
