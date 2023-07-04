@@ -51,7 +51,9 @@ const unionJSON = (box: UnionBox): Union => ({
 })
 
 const innerQueryJSON = (box: InnerQueryBox): InnerQuery => ({
-  inner_query: {...generateJSON([box])}
+  inner_query: {
+    fetch: { ...getJSON(box) }
+  }
 });
 
 
