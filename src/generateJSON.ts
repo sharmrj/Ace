@@ -32,7 +32,9 @@ const findRoot = (box: Box): Box => {
   return box;
 };
 
-const tableJSON = (box: TableBox): Table => box.table;
+const tableJSON = (box: TableBox): Table => ({
+  table: box.table
+});
 
 const joinJSON = (box: JoinBox): Join => ({
   join: {
