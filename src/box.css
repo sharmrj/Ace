@@ -11,3 +11,37 @@
 .box.selected {
   border: 5px solid white;
 }
+
+.configure {
+  position: absolute;
+  margin: 0 auto;
+  left: 25%;
+  width: 800px;
+  height: 500px;
+  background-color: #242424;
+  border: 2.5px solid whitesmoke;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.configure .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 12px;
+}
+
+.configure .header .close-button {
+  width: 50px;
+  height: 25px;
+  border: 2px solid whitesmoke;
+  border-radius: 2px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.configure .header .title {
+  font-size: 25px;
+}

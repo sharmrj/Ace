@@ -2,6 +2,7 @@
 export const createJoinBox = (position: Vector): Box => {
   return {
     position,
+    alias: '',
     out: null,
     element: null,
     lines: [],
@@ -24,6 +25,7 @@ export const createJoinBox = (position: Vector): Box => {
 export const createTableBox = (position: Vector): Box => {
   return {
     position,
+    alias: '',
     out: null,
     element: null,
     lines: [],
@@ -52,6 +54,7 @@ export const createTableBox = (position: Vector): Box => {
 export const createUnionBox = (position: Vector): Box => {
   return {
     position,
+    alias: '',
     out: null,
     element: null,
     lines: [],
@@ -63,6 +66,7 @@ export const createUnionBox = (position: Vector): Box => {
 export const createInnerQueryBox = (position: Vector): Box => {
   return {
     position,
+    alias: '',
     in: null,
     out: null,
     element: null,

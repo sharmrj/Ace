@@ -6,6 +6,7 @@ export const generateJSON = (boxes: Box[]): Query => {
   const root = findRoot(boxes[0]);
   return {
     fetch: {
+      alias: root.alias,
       ...getJSON(root)
     }
   }
@@ -39,7 +40,7 @@ const tableJSON = (box: TableBox): Table => ({
 const joinJSON = (box: JoinBox): Join => ({
   join: {
     select_columns: box.select_columns,
-    lft_tbl: {fetch:{...getJSON(box.leftIn)}},
+    left_tbl: {fetch:{...getJSON(box.leftIn)}},
     right_tbl: {fetch:{...getJSON(box.rightIn)}},
     merge_strategy: box.merge_strategy
   }
@@ -47,14 +48,14 @@ const joinJSON = (box: JoinBox): Join => ({
 
 const unionJSON = (box: UnionBox): Union => ({
   union: {
-    lft_tbl: {fetch:{...getJSON(box.leftIn)}},
+    left_tbl: {fetch:{...getJSON(box.leftIn)}},
     right_tbl: {fetch:{...getJSON(box.rightIn)}}
   }
 })
 
 const innerQueryJSON = (box: InnerQueryBox): InnerQuery => ({
   inner_query: {
-    fetch: { ...getJSON(box.in) }
+    fetch: { alias: box.alias, ...getJSON(box.in) }
   }
 });
 

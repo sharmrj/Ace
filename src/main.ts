@@ -9,6 +9,7 @@ import {
   } from './create.ts'
 import { makeDraggable, setPosition } from './drag.ts';
 import { generateJSON } from './generateJSON.ts';
+import { configure } from './forms.ts';
 
 let n = 0;
 
@@ -82,6 +83,11 @@ const initBoxes = (boxList: Box[]) => {
       }
     });
     el.textContent = boxKind(box);
+    el.addEventListener('click', (event: Events.MouseEvent) => {
+      if (!event.altKey) return;
+      event.stopPropagation();
+      configure(box);
+    });
     document.body.append(el);
   });
 }

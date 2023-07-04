@@ -28,7 +28,7 @@ export type Select = {
   select_columns: String[];
 }
 export type LeftTable = {
-  lft_tbl: Fetch | null;
+  left_tbl: Fetch | null;
 }
 export type RightTable = {
   right_tbl: Fetch | null;
@@ -97,6 +97,7 @@ type BaseBox = {
   out: Box | null
   element: HTMLElement | null;
   lines: Unknown[];
+  alias?: String;
 }
 
 export type Box = BaseBox & (JoinBox | TableBox | UnionBox | InnerQueryBox)
