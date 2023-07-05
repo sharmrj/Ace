@@ -1,4 +1,4 @@
-import { boxKind } from './main.ts';
+import { boxKind, getPayload } from './main.ts';
 
 export const generateJSON = (boxes: Box[]): Query => {
   if(boxes.length === 0) return {};
@@ -7,7 +7,8 @@ export const generateJSON = (boxes: Box[]): Query => {
   return {
     fetch: {
       ...getJSON(root)
-    }
+    },
+    ...getPayload(),
   }
 };
 

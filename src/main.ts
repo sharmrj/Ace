@@ -12,6 +12,13 @@ import { generateJSON } from './generateJSON.ts';
 import { configure } from './forms.ts';
 
 let n = 0;
+const payload = {
+  final_table_name: '',
+  partition_columns: [],
+  number_of_files_in_partition: 1
+};
+
+export const getPayload = () => payload;
 
 const createElement = (box: Box): HTMLElement => {
   const position = box.position;
@@ -133,19 +140,12 @@ const initMenu = () => {
 };
 
 const boxes = [];
+export const getBoxes = () => boxes;
 
 const generateButton = document.createElement('button');
 generateButton.textContent = 'Generate Pipeline';
 generateButton.addEventListener('click', () => {
-  fetch('/url/goes/here', {
-    method: 'POST',
-    cache: 'no-cache',
-    credentials: 'omit',
-    headers:{
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(generateJSON(boxes)),
-  }).catch(e => console.error(e));
+  configure({}, true);
 })
 generateButton.style.position = 'absolute';
 generateButton.style.right = '2%';

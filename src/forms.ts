@@ -1,23 +1,28 @@
-import { boxKind } from './main.ts'; 
+import { boxKind, getPayload, getBoxes } from './main.ts'; 
+import { generateJSON } from './generateJSON.ts';
 
-export const configure = (box: Box): void => {
-  const kind = box.element.textContent;
-  const conf = document.createElement('div');
-  conf.classList.add('configure');
-  const header = document.createElement('div');
-  header.classList.add('header');
-  const title = document.createElement('div');
-  title.textContent = `Configure ${kind}`;
-  title.classList.add('title')
-  const closeButton = document.createElement('div');
-  closeButton.classList.add('close-button');
-  closeButton.addEventListener('click', () => {
-    conf.remove();
-  })
-  closeButton.textContent = 'close';
-  header.replaceChildren(title, closeButton)
-  conf.append(header);
+
+export const configure = (box: Box | any, notBox = false): void => {
+    const conf = document.createElement('div');
+    conf.classList.add('configure');
+  if (!notBox) {
+    const kind = box.element.textContent;
+    const header = document.createElement('div');
+    header.classList.add('header');
+    const title = document.createElement('div');
+    title.textContent = `Configure ${kind}`;
+    title.classList.add('title')
+    const closeButton = document.createElement('div');
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+      conf.remove();
+    })
+    closeButton.textContent = 'close';
+    header.replaceChildren(title, closeButton)
+    conf.append(header);
+  }
   const getConfigurer = () => {
+    if (notBox) return configureFinal(getPayload());
     const kind = boxKind(box);
     switch(kind) {
       case 'Table':
@@ -34,6 +39,37 @@ export const configure = (box: Box): void => {
   xs.map(x => conf.append(x));
   document.body.append(conf);
 }
+
+const configureFinal = (payload) => {
+  const name = textInput(payload, 'final_table_name', 'Final Table Name');
+  const pc = multiTextInput(payload, 'partition_columns', 'Partition Columns');
+  const num = document.createElement('input');
+  num.type = 'text';
+  num.name = 'Number of files in partition';
+  const label = document.createElement('label');
+  label.for = num.name;
+  label.textContent = num.name;
+  num.value = deepGet(payload, 'number_of_files_in_partition');
+  num.addEventListener('change', (event) => {
+    deepSet(payload, 'number_of_files_in_partition', event.target.value);
+  });
+
+  const sendButton = document.createElement('button');
+  sendButton.textContent = 'Send';
+  sendButton.addEventListener('click', () => {
+    fetch('/url/goes/here', {
+      method: 'POST',
+      cache: 'no-cache',
+      credentials: 'omit',
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(generateJSON(getBoxes())),
+    }).catch(e => console.error(e));
+  })
+
+  return [...name, ...pc, label, num, sendButton];
+};
 
 const configureInnerQuery = (box: Box): HTMLElement[] => {
   const alias = textInput(box, 'alias', 'Alias');
