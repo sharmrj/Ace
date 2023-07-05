@@ -140,6 +140,7 @@ generateButton.addEventListener('click', () => {
   fetch('/url/goes/here', {
     method: 'POST',
     cache: 'no-cache',
+    credentials: 'omit',
     headers:{
       "Content-Type": "application/json"
     },
