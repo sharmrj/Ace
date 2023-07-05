@@ -70,6 +70,24 @@ export const createInnerQueryBox = (position: Vector): Box => {
     in: null,
     out: null,
     element: null,
-    lines: []
+    lines: [],
+    extra: {
+      functions: [],
+      select_columns: [],
+      where_clause: {
+        c0: {
+          name: '',
+          operator: '',
+          value: '',
+        },
+        And: {
+          c0: {
+            name: '',
+            operator: '',
+            value: '',
+          }
+        }
+      }
+    }
   }
 };

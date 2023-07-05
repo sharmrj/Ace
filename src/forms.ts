@@ -37,7 +37,10 @@ export const configure = (box: Box): void => {
 
 const configureInnerQuery = (box: Box): HTMLElement[] => {
   const alias = textInput(box, 'alias', 'Alias');
-  return alias;
+  const functions = multiTextInput(box, 'extra.functions', 'Functions');
+  const select = multiTextInput(box, 'extra.select_columns', 'Select Columns');
+  const w = where(box, 'extra', 'Where Clause');
+  return [...alias, ...select, ...functions, ...w];
 };
 
 const configureJoin = (box: Box): HTMLElement[] => {

@@ -22,7 +22,7 @@ export type Union = {
 
 export type InnerQuery= {
   inner_query: Query;
-}
+} & Select & Functions & Where
 
 export type Select = {
   select_columns: String[];
@@ -110,10 +110,11 @@ export type JoinBox = {
 export type TableBox = Table
 
 export type UnionBox = {
-  leftIn: Box | null
+  leftIn: Box | null;
   rightIn: Box | null; 
 }
 
 export type InnerQueryBox = Box & {
-  in: Box | null
+  in: Box | null;
+  extra: Select & Functions & Where
 }

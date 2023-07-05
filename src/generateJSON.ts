@@ -55,7 +55,13 @@ const unionJSON = (box: UnionBox): Union => ({
 
 const innerQueryJSON = (box: InnerQueryBox): InnerQuery => ({
   inner_query: {
-    fetch: { alias: box.alias, ...getJSON(box.in) }
+    fetch: { 
+      alias: box.alias, 
+      select_columns: box.extra.select_columns,
+      functions: box.extra.functions,
+      where_clause: box.extra.where_clause,
+      ...getJSON(box.in),
+    }
   }
 });
 
