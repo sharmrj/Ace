@@ -85,7 +85,7 @@ const functions = (box: Box, path: String, title: String): HTMLElement[] => {
   fcontainer.style.marginBottom = '12px';
 
   const addButton = document.createElement('button');
-  addButton.textContent = 'add';
+  addButton.textContent = 'Add Function';
   addButton.addEventListener('click', () => {
     const cf = deepGet(box, path)
     cf.push(structuredClone(f));
