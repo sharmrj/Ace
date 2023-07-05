@@ -3,24 +3,22 @@ import { generateJSON } from './generateJSON.ts';
 
 
 export const configure = (box: Box | any, notBox = false): void => {
-    const conf = document.createElement('div');
-    conf.classList.add('configure');
-  if (!notBox) {
-    const kind = box.element.textContent;
-    const header = document.createElement('div');
-    header.classList.add('header');
-    const title = document.createElement('div');
-    title.textContent = `Configure ${kind}`;
-    title.classList.add('title')
-    const closeButton = document.createElement('div');
-    closeButton.classList.add('close-button');
-    closeButton.addEventListener('click', () => {
-      conf.remove();
-    })
-    closeButton.textContent = 'close';
-    header.replaceChildren(title, closeButton)
-    conf.append(header);
-  }
+  const conf = document.createElement('div');
+  conf.classList.add('configure');
+  const kind = box?.element?.textContent ?? 'Final Table';
+  const header = document.createElement('div');
+  header.classList.add('header');
+  const title = document.createElement('div');
+  title.textContent = `Configure ${kind}`;
+  title.classList.add('title')
+  const closeButton = document.createElement('div');
+  closeButton.classList.add('close-button');
+  closeButton.addEventListener('click', () => {
+    conf.remove();
+  })
+  closeButton.textContent = 'close';
+  header.replaceChildren(title, closeButton)
+  conf.append(header);
   const getConfigurer = () => {
     if (notBox) return configureFinal(getPayload());
     const kind = boxKind(box);
