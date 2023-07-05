@@ -65,7 +65,7 @@ const configureFinal = (payload) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(generateJSON(getBoxes())),
-    }).catch(e => console.error(e));
+    }).catch(e => console.error(e)).finally(document.querySelector('.configure').remove());
   })
 
   return [...name, ...pc, label, num, sendButton];
