@@ -6,7 +6,6 @@ export const generateJSON = (boxes: Box[]): Query => {
   const root = findRoot(boxes[0]);
   return {
     fetch: {
-      alias: root.alias,
       ...getJSON(root)
     }
   }
@@ -40,16 +39,36 @@ const tableJSON = (box: TableBox): Table => ({
 const joinJSON = (box: JoinBox): Join => ({
   join: {
     select_columns: box.select_columns,
-    left_tbl: {fetch:{...getJSON(box.leftIn)}},
-    right_tbl: {fetch:{...getJSON(box.rightIn)}},
+    left_tbl: {
+      fetch:{
+        alias: box.alias,
+        ...getJSON(box.leftIn)
+      }
+    },
+    right_tbl: {
+      fetch:{
+        alias: box.alias,
+        ...getJSON(box.rightIn)
+      }
+    },
     merge_strategy: box.merge_strategy
   }
 });
 
 const unionJSON = (box: UnionBox): Union => ({
   union: {
-    left_tbl: {fetch:{...getJSON(box.leftIn)}},
-    right_tbl: {fetch:{...getJSON(box.rightIn)}}
+    left_tbl: {
+      fetch:{
+        alias: box.alias,
+        ...getJSON(box.leftIn)
+      }
+    },
+    right_tbl: {
+      fetch:{
+        alias: box.alias,
+        ...getJSON(box.rightIn)
+      }
+    }
   }
 })
 

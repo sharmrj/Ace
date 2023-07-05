@@ -91,6 +91,15 @@ const functions = (box: Box, path: String, title: String): HTMLElement[] => {
     cf.push(structuredClone(f));
     deepSet(box, path, cf);
     renderList(box, path, fcontainer, cf.map(func => func.case.alias));
+
+    when[1].value = [];
+    otherwise[1].value = [];
+    alias[1].value = '';
+    f.case = {
+      when:[],
+      otherwise: [],
+      alias: ''
+    }
   });
   return [t, ...when, ...otherwise, ...alias, addButton, fcontainer];
 };
