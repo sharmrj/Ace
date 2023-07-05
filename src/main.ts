@@ -135,9 +135,16 @@ const initMenu = () => {
 const boxes = [];
 
 const generateButton = document.createElement('button');
-generateButton.textContent = 'generate JSON';
+generateButton.textContent = 'Generate Pipeline';
 generateButton.addEventListener('click', () => {
-  console.info(generateJSON(boxes));
+  fetch('/url/goes/here', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers:{
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(generateJSON(boxes)),
+  }).catch(e => console.error(e));
 })
 generateButton.style.position = 'absolute';
 generateButton.style.right = '2%';
