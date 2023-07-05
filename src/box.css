@@ -45,3 +45,13 @@
 .configure .header .title {
   font-size: 25px;
 }
+
+.configure span {
+  padding: 3px;
+  margin: 3px;
+  border: 1px solid whitesmoke;
+  border-radius: 1px;
+}
+.configure span:hover {
+  background-color: black!important;
+}

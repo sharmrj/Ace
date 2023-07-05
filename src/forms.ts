@@ -37,10 +37,10 @@ export const configure = (box: Box): void => {
 
 const configureInnerQuery = (box: Box): HTMLElement[] => {
   const alias = textInput(box, 'alias', 'Alias');
-  const functions = multiTextInput(box, 'extra.functions', 'Functions');
+  const fs = functions(box, 'extra.functions', 'Functions');
   const select = multiTextInput(box, 'extra.select_columns', 'Select Columns');
   const w = where(box, 'extra', 'Where Clause');
-  return [...alias, ...select, ...functions, ...w];
+  return [...alias, ...select, ...w, ...fs];
 };
 
 const configureJoin = (box: Box): HTMLElement[] => {
@@ -58,12 +58,62 @@ const configureUnion = (box: Box): HTMLElement[] => {
 const configureTable = (box: Box): HTMLElement[] => {
   const [aLabel, alias] = textInput(box, 'alias', 'Alias');
   const [nLabel, name] = textInput(box, 'table.name', 'Name');
-  const [fLabel, functions] = multiTextInput(box, 'table.functions', 'Functions');
+  const fs = functions(box, 'table.functions', 'Functions');
   const [sLabel, select] = multiTextInput(box, 'table.select_columns', 'Select Columns');
   const w = where(box, 'table', 'Where Clause')
   
-  return [aLabel, alias, nLabel, name , fLabel, functions, sLabel, select, ...w];
+  return [aLabel, alias, nLabel, name , sLabel, select, ...w, ...fs];
 };
+
+const functions = (box: Box, path: String, title: String): HTMLElement[] => {
+  const t = document.createElement('div');
+  t.textContent = title;
+  t.style.fontWeight = 800;
+  t.style.textDecoration = 'underline';
+  const f = {
+    case: {
+      when: [],
+      otherwise: [],
+      alias: ''
+    }
+  }
+  const when = multiTextInput(f, 'case.when', 'When');
+  const otherwise = multiTextInput(f, 'case.otherwise', 'Otherwise');
+  const alias = textInput(f, 'case.alias', 'Alias');
+  const fcontainer = document.createElement('div');
+  fcontainer.style.marginTop = '12px';
+  fcontainer.style.marginBottom = '12px';
+
+  const addButton = document.createElement('button');
+  addButton.textContent = 'add';
+  addButton.addEventListener('click', () => {
+    const cf = deepGet(box, path)
+    cf.push(structuredClone(f));
+    deepSet(box, path, cf);
+    renderList(box, path, fcontainer, cf.map(func => func.case.alias));
+  });
+  return [t, ...when, ...otherwise, ...alias, addButton, fcontainer];
+};
+
+const renderList = (box: Box, path: String, container: HTMLElement, names: String[]) => {
+  container.replaceChildren(...names.map(name => {
+    const element = document.createElement('span');
+    element.textContent = name;
+    element.addEventListener('mouseenter', () => {
+      element.textContent = `${element.textContent} x`;
+    });
+    element.addEventListener('mouseleave', () => {
+      element.textContent = element.textContent.slice(0, -2);
+    });
+    element.addEventListener('click', () => {
+      const fs = deepGet(box, path);
+      const ffs = fs.filter(x => x.case.alias !== name)
+      deepSet(box, path, ffs);
+      element.remove();
+    });
+    return element;
+  }));
+}
 
 const mergeStrategy = (box: Box, title: String): HTMLElement[] => {
   const t = document.createElement('div');
