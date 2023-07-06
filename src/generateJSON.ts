@@ -76,11 +76,11 @@ const innerQueryJSON = (box: InnerQueryBox): InnerQuery => ({
   alias: box.alias,
   inner_query: {
     fetch: { 
-      select_columns: box.extra.select_columns,
-      functions: box.extra.functions,
-      where_clause: box.extra.where_clause,
       ...getJSON(box.in),
-    }
+    },
+    select_columns: box.extra.select_columns,
+    functions: box.extra.functions,
+    where_clause: box.extra.where_clause,
   }
 });
 

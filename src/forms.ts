@@ -72,14 +72,14 @@ const configureFinal = (payload) => {
 const configureInnerQuery = (box: Box): HTMLElement[] => {
   const alias = textInput(box, 'alias', 'Alias');
   const fs = functions(box, 'extra.functions', 'Functions');
-  const select = multiTextInput(box, 'extra.select_columns', 'Select Columns');
+  const select = multiTextInput(box, 'extra.select_columns', 'Select Columns', '##');
   const w = where(box, 'extra', 'Where Clause');
   return [...alias, ...select, ...w, ...fs];
 };
 
 const configureJoin = (box: Box): HTMLElement[] => {
   const alias = textInput(box, 'alias', 'Alias');
-  const select = multiTextInput(box, 'select_columns', 'Select Columns');
+  const select = multiTextInput(box, 'select_columns', 'Select Columns', '##');
   const merge = mergeStrategy(box, 'Merge Strategy');
   return [...alias, ...select, ...merge];
 };
@@ -91,7 +91,7 @@ const configureUnion = (box: Box): HTMLElement[] => {
 
 const configureTable = (box: Box): HTMLElement[] => {
   const [aLabel, alias] = textInput(box, 'alias', 'Alias');
-  const [nLabel, name] = textInput(box, 'table.name', 'Name');
+  const [nLabel, name] = textInput(box, 'table.name', 'Name', '##');
   const fs = functions(box, 'table.functions', 'Functions');
   const [sLabel, select] = multiTextInput(box, 'table.select_columns', 'Select Columns');
   const w = where(box, 'table', 'Where Clause')
