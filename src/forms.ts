@@ -112,7 +112,7 @@ const functions = (box: Box, path: String, title: String): HTMLElement[] => {
     }
   }
   const when = multiTextInput(f, 'case.when', 'When');
-  const otherwise = multiTextInput(f, 'case.otherwise', 'Otherwise');
+  const otherwise = textInput(f, 'case.otherwise', 'Otherwise');
   const alias = textInput(f, 'case.alias', 'Alias');
   const fcontainer = document.createElement('div');
   fcontainer.style.marginTop = '12px';

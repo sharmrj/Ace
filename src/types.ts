@@ -37,7 +37,7 @@ export type RightTable = {
 export type Function = {
   case: {
     when: String[];
-    otherwise: String[];
+    otherwise: String;
     alias?: String;
   }
 }
