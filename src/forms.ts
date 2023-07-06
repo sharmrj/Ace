@@ -93,7 +93,7 @@ const configureTable = (box: Box): HTMLElement[] => {
   const [aLabel, alias] = textInput(box, 'alias', 'Alias');
   const [nLabel, name] = textInput(box, 'table.name', 'Name', '##');
   const fs = functions(box, 'table.functions', 'Functions');
-  const [sLabel, select] = multiTextInput(box, 'table.select_columns', 'Select Columns');
+  const [sLabel, select] = multiTextInput(box, 'table.select_columns', 'Select Columns', '##');
   const w = where(box, 'table', 'Where Clause')
   
   return [aLabel, alias, nLabel, name , sLabel, select, ...w, ...fs];
