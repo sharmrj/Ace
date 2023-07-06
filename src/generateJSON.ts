@@ -34,21 +34,21 @@ const findRoot = (box: Box): Box => {
 };
 
 const tableJSON = (box: TableBox): Table => ({
+  alias: box.alias,
   table: box.table
 });
 
 const joinJSON = (box: JoinBox): Join => ({
+  alias: box.alias,
   join: {
     select_columns: box.select_columns,
     left_tbl: {
       fetch:{
-        alias: box.alias,
         ...getJSON(box.leftIn)
       }
     },
     right_tbl: {
       fetch:{
-        alias: box.alias,
         ...getJSON(box.rightIn)
       }
     },
@@ -57,16 +57,15 @@ const joinJSON = (box: JoinBox): Join => ({
 });
 
 const unionJSON = (box: UnionBox): Union => ({
+  alias: box.alias,
   union: {
     left_tbl: {
       fetch:{
-        alias: box.alias,
         ...getJSON(box.leftIn)
       }
     },
     right_tbl: {
       fetch:{
-        alias: box.alias,
         ...getJSON(box.rightIn)
       }
     }
@@ -74,9 +73,9 @@ const unionJSON = (box: UnionBox): Union => ({
 })
 
 const innerQueryJSON = (box: InnerQueryBox): InnerQuery => ({
+  alias: box.alias,
   inner_query: {
     fetch: { 
-      alias: box.alias, 
       select_columns: box.extra.select_columns,
       functions: box.extra.functions,
       where_clause: box.extra.where_clause,

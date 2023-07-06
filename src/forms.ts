@@ -111,7 +111,7 @@ const functions = (box: Box, path: String, title: String): HTMLElement[] => {
       alias: ''
     }
   }
-  const when = multiTextInput(f, 'case.when', 'When');
+  const when = multiTextInput(f, 'case.when', 'When', '##');
   const otherwise = textInput(f, 'case.otherwise', 'Otherwise');
   const alias = textInput(f, 'case.alias', 'Alias');
   const fcontainer = document.createElement('div');
@@ -235,16 +235,16 @@ const textInput = (box: Box, path: String, name: String): HTMLElement[] => {
   return [label, input];
 };
 
-const multiTextInput = (box: Box, path: String, name: String): HTMLElement[] => {
+const multiTextInput = (box: Box, path: String, name: String, delimiter = ','): HTMLElement[] => {
   const input = document.createElement('input');
   input.type = 'text';
   input.name = name;
   const label = document.createElement('label');
   label.for = name;
-  label.textContent = name;
-  input.value = deepGet(box, path).join(', ');
+  label.textContent = `${name} (Multi input delimited by ${delimiter})`;
+  input.value = deepGet(box, path).join(`${delimiter} `);
   input.addEventListener('change', (event) => {
-    deepSet(box, path, event.target.value.split(',').map(x => x.trim()));
+    deepSet(box, path, event.target.value.split(delimiter).map(x => x.trim()));
   });
   return [label, input];
 };
