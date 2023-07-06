@@ -5,8 +5,10 @@ export const generateJSON = (boxes: Box[]): Query => {
   if(!boxes[0]) return {};
   const root = findRoot(boxes[0]);
   return {
-    fetch: {
-      ...getJSON(root)
+    custom_query: {
+      fetch: {
+        ...getJSON(root)
+      },
     },
     ...getPayload(),
   }

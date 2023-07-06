@@ -1,6 +1,11 @@
 export type Query = {
-  fetch: Fetch;
-}
+  custom_query: {
+    fetch: Fetch;
+  };
+  final_table_name: String;
+  partition_columns: String[];
+  number_of_files_in_partition: Number;
+};
 
 export type Fetch = FetchBase & (Join | Table | Union | InnerQuery);
 
